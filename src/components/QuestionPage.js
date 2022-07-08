@@ -2,6 +2,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Error from './Error';
 import { handleSaveQuestionAnswer } from '../actions/shared';
+import { Button, Divider, Progress, Grid, Header, Image, Segment } from 'semantic-ui-react';
 
 const withRouter = (Component) => {
     const ComponentWithRouterProp = (props) => {
@@ -15,7 +16,7 @@ const withRouter = (Component) => {
 };
 
 const QuestionPage = props => {
-    const { user, question, dispatch } = props;
+    const { pollUser, question, dispatch, currentUser } = props;
 
     if (!question) {
         return <Error />;
@@ -27,40 +28,57 @@ const QuestionPage = props => {
 
     const getPercentage = (amount) => {
         const total = question.optionOne.votes.length + question.optionTwo.votes.length;
-        return (amount * 100 / total) + '%';
+        return (amount * 100 / total);
     };
+
+    const options = ['optionOne', 'optionTwo'];
 
     return (
         <div>
-            <h1>Poll by {user.name}</h1>
-            <img src={user.avatarURL} alt={`Avatar of ${user.name}`} />
+            <Header textAlign="center" size="huge">
+                <Image src={pollUser.avatarURL} alt={`Avatar of ${pollUser.name}`} avatar verticalAlign="bottom" size="large" />
+                <span>Poll by {pollUser.name}</span>
+            </Header>
+            <Header textAlign="center" size="large" data-testid=" headline">Would you rather</Header>
+
             {props.alreadyAnswered ? (
-                <div>
-                    <h3>Would your rather</h3>
-                    <p>Your vote: {user.answers[props.id]}</p>
-                    <p>
-                        {question.optionOne.text}<br />
-                        Votes: {question.optionOne.votes.length}<br />
-                        Percentage: {getPercentage(question.optionOne.votes.length)}
-                    </p>
-                    <p>
-                        {question.optionTwo.text}<br />
-                        Votes: {question.optionTwo.votes.length}<br />
-                        Percentage: {getPercentage(question.optionTwo.votes.length)}
-                    </p>
-                </div>
+                <Segment placeholder>
+                    {options.map((option, key) => (
+                        <div key={key} className="Progress">
+                            {currentUser.answers[props.id] === option && (
+                                <Image src={currentUser.avatarURL} alt={`Avatar of ${currentUser.name}`} avatar className="Progress__avatar" />
+                            )}
+
+                            <Progress
+                                percent={getPercentage(question[option].votes.length)}
+                                progress
+                                size="medium"
+                                color="blue">
+                                {question[option].text} | Votes: {question[option].votes.length}
+                            </Progress>
+                        </div>
+                    ))}
+
+                </Segment>
             ) : (
-                <div>
-                    Would you rather...
-                    <p>
-                        {question.optionOne.text}<br />
-                        <button onClick={() => handleVote('optionOne')}>Vote</button>
-                    </p>
-                    <p>
-                        {question.optionTwo.text}<br />
-                        <button onClick={() => handleVote('optionTwo')}>Vote</button>
-                    </p>
-                </div>
+                <Segment placeholder>
+                    <Grid columns={2} stackable textAlign="center">
+                        <Divider vertical>Or</Divider>
+
+                        <Grid.Row verticalAlign="middle">
+                            <Grid.Column>
+                                <p><strong>{question.optionOne.text}</strong></p>
+                                <Button onClick={() => handleVote('optionOne')} primary>Vote</Button>
+
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <p><strong>{question.optionTwo.text}</strong></p>
+                                <Button onClick={() => handleVote('optionTwo')} primary>Vote</Button>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
             )}
         </div>
     );
@@ -81,7 +99,8 @@ const mapStateToProps = ({ authedUser, users, questions }, props) => {
         id,
         question: questions[id],
         alreadyAnswered,
-        user: pollUser
+        pollUser: pollUser,
+        currentUser
     };
 };
 

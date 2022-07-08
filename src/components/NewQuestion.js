@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { handleSaveQuestion } from '../actions/shared';
+import { Button, Divider, Grid, Form, Segment, Header } from 'semantic-ui-react';
 
 const NewQuestion = props => {
     const navigate = useNavigate();
@@ -30,20 +31,35 @@ const NewQuestion = props => {
 
     return (
         <div>
-            <h1 data-testid="headline">Would you rather</h1>
-            Create your own poll
-            <form onSubmit={handleSubmit}>
-                <p>
-                    First option:<br />
-                    <input type="text" onChange={handleChangeOption1} />
-                </p>
-                <p>
-                    Second option:<br />
-                    <input type="text" onChange={handleChangeOption2} />
-                </p>
+            <Header textAlign="center" size="huge">Create your own poll</Header>
+            <Header textAlign="center" size="large" data-testid="headline">Would you rather</Header>
 
-                <button type="submit" disabled={!(optionOne && optionTwo)}>Create Question</button>
-            </form>
+            <Form onSubmit={handleSubmit}>
+                <Segment placeholder>
+                    <Grid columns={2} stackable textAlign="center">
+                        <Divider vertical>Or</Divider>
+
+                        <Grid.Row verticalAlign="middle">
+                            <Grid.Column>
+                                <Form.Group widths="equal">
+                                    <Form.Input fluid label="First option" value={optionOne} onChange={handleChangeOption1} />
+                                </Form.Group>
+
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <Form.Group widths="equal">
+                                    <Form.Input fluid label="Second option" value={optionTwo} onChange={handleChangeOption2} />
+                                </Form.Group>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
+
+                <div className="submit-button">
+                    <Button type="submit" disabled={!(optionOne && optionTwo)} primary>Create Question</Button>
+                </div>
+            </Form>
         </div>
     );
 };

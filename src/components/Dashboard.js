@@ -1,33 +1,36 @@
 import { connect } from 'react-redux';
 import QuestionItem from './QuestionItem';
+import { Card, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = props => {
 
     return (
         <div>
             <h3>New Questions</h3>
-            {props.newQuestions ? (
-                    <ul>
+            {props.newQuestions.length ?
+                (
+                    <Card.Group>
                         {props.newQuestions.map(question => (
-                            <li key={question.id}>
-                                <QuestionItem question={question} />
-                            </li>
+                            <QuestionItem question={question} key={question.id} />
                         ))}
-                    </ul>
+                    </Card.Group>
                 )
-                : <div>No new questions</div>
+                : <div>No new questions. <Link to="/add">Create one</Link></div>
             }
+
+            <Divider />
+
             <h3>Done</h3>
-            {props.answeredQuestions ? (
-                    <ul>
+            {props.answeredQuestions.length ?
+                (
+                    <Card.Group>
                         {props.answeredQuestions.map(question => (
-                            <li key={question.id}>
-                                <QuestionItem question={question} />
-                            </li>
+                            <QuestionItem question={question} key={question.id} />
                         ))}
-                    </ul>
+                    </Card.Group>
                 )
-                : <div>No new questions</div>
+                : <div>No questions. Vote for some questions above.</div>
             }
         </div>
     );

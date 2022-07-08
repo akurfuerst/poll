@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { setAuthedUser } from '../actions/authedUser';
+import { Card, Form, Button } from 'semantic-ui-react';
 
 const Login = (props) => {
     const [user, setUser] = useState('');
@@ -34,19 +35,26 @@ const Login = (props) => {
     //props.dispatch(setAuthedUser(user));
 
     return (
-        <form onSubmit={handleSubmit}>
-            {error && <div data-testid="error">Sorry, but the username or password is wrong! Try again.</div>}
-            user: {props.users.length}
-            <p>
-                <label>User</label>
-                <input type="text" value={user} onChange={handleUserChange} data-testid="user" />
-            </p>
-            <p>
-                <label>Password</label>
-                <input type="password" value={password} onChange={handlePasswordChange} data-testid="password" />
-            </p>
-            <input type="submit" value="Login" disabled={!(user && password)} data-testid="submit" />
-        </form>
+        <div className="Login">
+            <Card>
+                <Card.Content>
+                    <Card.Header>Login</Card.Header>
+
+                    <Form onSubmit={handleSubmit}>
+                        {error && <p data-testid="error" className="error">Sorry, but the username or password is wrong! Try again.</p>}
+                        <Form.Group widths="equal">
+                            <Form.Input fluid label="User" value={user} onChange={handleUserChange} data-testid="user" />
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                            <Form.Input type="password" fluid label="Password" value={password} onChange={handlePasswordChange} data-testid="password" />
+                        </Form.Group>
+
+                        <Button type="submit" disabled={!(user && password)} data-testid="submit">Login</Button>
+                    </Form>
+                </Card.Content>
+            </Card>
+
+        </div>
     );
 };
 

@@ -11,6 +11,7 @@ import NewQuestion from './NewQuestion';
 import Nav from './Nav';
 import Error from './Error';
 import Leaderboard from './Leaderboard';
+import { Container } from 'semantic-ui-react';
 
 function App(props) {
     useEffect(() => {
@@ -20,26 +21,26 @@ function App(props) {
     return (
         <div className="App">
             <LoadingBar />
-
-            {props.authedUser && props.loading === false && <Nav />}
-            {props.authedUser && props.loading === false ? (
-                <Routes>
-                    <Route path="/" exact element={<Dashboard />} />
-                    <Route path="/add" exact element={<NewQuestion />} />
-                    <Route path="/question/:id" element={<QuestionPage />} />
-                    <Route
-                        path="/question/*"
-                        element={<Navigate to="/" replace />}
-                    />
-                    <Route path="/leaderboard" element={<Leaderboard />} />
-                    <Route path="*" element={<Error />} />
-                </Routes>
-            ) : (props.loading === true) ? null : (
-                <Routes>
-                    <Route path="*" element={<Login />} />
-                </Routes>
-            )}
-
+            <Container>
+                {props.authedUser && props.loading === false && <Nav />}
+                {props.authedUser && props.loading === false ? (
+                    <Routes>
+                        <Route path="/" exact element={<Dashboard />} />
+                        <Route path="/add" exact element={<NewQuestion />} />
+                        <Route path="/question/:id" element={<QuestionPage />} />
+                        <Route
+                            path="/question/*"
+                            element={<Navigate to="/" replace />}
+                        />
+                        <Route path="/leaderboard" element={<Leaderboard />} />
+                        <Route path="*" element={<Error />} />
+                    </Routes>
+                ) : (props.loading === true) ? null : (
+                    <Routes>
+                        <Route path="*" element={<Login />} />
+                    </Routes>
+                )}
+            </Container>
         </div>
     );
 }

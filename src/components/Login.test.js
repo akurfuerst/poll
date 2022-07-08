@@ -22,8 +22,8 @@ describe('Login', () => {
         const username = 'sarahedo';
         const password = 'password123123';
 
-        const inputUser = component.getByTestId('user');
-        const inputPassword = component.getByTestId('password');
+        const inputUser = component.getByTestId('user').children[0];
+        const inputPassword = component.getByTestId('password').children[0];
         const submit = component.getByTestId('submit');
 
         fireEvent.change(inputUser, { target: { value: username } });
@@ -46,8 +46,8 @@ describe('Login', () => {
         const username = 'sarahedo';
         const password = '';
 
-        const inputUser = component.getByTestId('user');
-        const inputPassword = component.getByTestId('password');
+        const inputUser = component.getByTestId('user').children[0];
+        const inputPassword = component.getByTestId('password').children[0];
 
         const submit = component.getByTestId('submit');
 

@@ -1,26 +1,28 @@
 import { connect } from 'react-redux';
+import { Table } from 'semantic-ui-react';
 
 const Leaderboard = props => {
     return (
-        <div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Users</th>
-                    <th>Answered</th>
-                    <th>Created</th>
-                </tr>
-                </thead>
-                <tbody>
-                {props.users.map(user => (
-                    <tr>
-                        <td>{user.name}</td>
-                        <td>{Object.keys(user.answers).length}</td>
-                        <td>{user.questions.length}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        <div className="Leaderboard">
+            <Table striped>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Users</Table.HeaderCell>
+                        <Table.HeaderCell textAlign="right">Answered</Table.HeaderCell>
+                        <Table.HeaderCell textAlign="right">Created</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                    {props.users.map(user => (
+                        <Table.Row key={user.id}>
+                            <Table.Cell>{user.name}</Table.Cell>
+                            <Table.Cell textAlign="right">{Object.keys(user.answers).length}</Table.Cell>
+                            <Table.Cell textAlign="right">{user.questions.length}</Table.Cell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
         </div>
     );
 };
