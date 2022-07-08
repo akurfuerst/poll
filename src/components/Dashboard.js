@@ -1,38 +1,70 @@
 import { connect } from 'react-redux';
 import QuestionItem from './QuestionItem';
-import { Card, Divider } from 'semantic-ui-react';
+import { Card, Menu, Label, Tab, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const Dashboard = props => {
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const panes = [
+        {
+            menuItem: (
+                <Menu.Item key="new">
+                    New Questions<Label>{props.newQuestions.length}</Label>
+                </Menu.Item>
+            ),
+            render: () => {
+                if (props.newQuestions.length) {
+                    return (
+                        <Tab.Pane className="spacer">
+                            <Card.Group>
+                                {props.newQuestions.map(question => (
+                                    <QuestionItem question={question} key={question.id} />
+                                ))}
+                            </Card.Group>
+                        </Tab.Pane>
+                    );
+                }
+                return (
+                    <Tab.Pane className="spacer">
+                        <div>No new questions. <Link to="/add">Create one</Link></div>
+                    </Tab.Pane>
+                );
+            },
+        },
+        {
+            menuItem: (
+                <Menu.Item key="done">
+                    Done<Label>{props.answeredQuestions.length}</Label>
+                </Menu.Item>
+            ),
+            render: () => {
+                if (props.answeredQuestions.length) {
+                    return (
+                        <Tab.Pane className="spacer">
+                            <Card.Group>
+                                {props.answeredQuestions.map(question => (
+                                    <QuestionItem question={question} key={question.id} />
+                                ))}
+                            </Card.Group>
+                        </Tab.Pane>
+                    );
+                }
+                return (
+                    <Tab.Pane className="spacer">
+                        <div>No questions. <Button onClick={() => setActiveIndex(1)}>Vote for some questions</Button></div>
+                    </Tab.Pane>
+                );
+            },
+        },
+    ];
 
     return (
-        <div>
-            <h3>New Questions</h3>
-            {props.newQuestions.length ?
-                (
-                    <Card.Group>
-                        {props.newQuestions.map(question => (
-                            <QuestionItem question={question} key={question.id} />
-                        ))}
-                    </Card.Group>
-                )
-                : <div>No new questions. <Link to="/add">Create one</Link></div>
-            }
-
-            <Divider />
-
-            <h3>Done</h3>
-            {props.answeredQuestions.length ?
-                (
-                    <Card.Group>
-                        {props.answeredQuestions.map(question => (
-                            <QuestionItem question={question} key={question.id} />
-                        ))}
-                    </Card.Group>
-                )
-                : <div>No questions. Vote for some questions above.</div>
-            }
-        </div>
+        <Tab
+            panes={panes}
+            activeIndex={activeIndex}
+            onTabChange={(e, { activeIndex }) => setActiveIndex(activeIndex)} />
     );
 };
 

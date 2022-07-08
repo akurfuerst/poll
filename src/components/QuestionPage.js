@@ -1,19 +1,8 @@
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Error from './Error';
 import { handleSaveQuestionAnswer } from '../actions/shared';
 import { Button, Divider, Progress, Grid, Header, Image, Segment } from 'semantic-ui-react';
-
-const withRouter = (Component) => {
-    const ComponentWithRouterProp = (props) => {
-        let location = useLocation();
-        let navigate = useNavigate();
-        let params = useParams();
-        return <Component {...props} router={{ location, navigate, params }} />;
-    };
-
-    return ComponentWithRouterProp;
-};
+import { withRouter } from '../utils/helpers';
 
 const QuestionPage = props => {
     const { pollUser, question, dispatch, currentUser } = props;
